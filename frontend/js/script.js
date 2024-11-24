@@ -25,9 +25,15 @@ let websocket
 
 const createMessageSelfElement = (content) => {
     const div = document.createElement("div");
+    const time = document.createElement("span");
 
     div.classList.add("message--self");
     div.innerHTML = content
+
+    time.classList.add("message--time");
+    time.textContent = getCurrentTime();
+
+    div.appendChild(time);
 
     return div;
 }
@@ -35,20 +41,29 @@ const createMessageSelfElement = (content) => {
 const createMessageOtherElement = (content, sender, senderColor) => {
     const div = document.createElement("div")
     const span = document.createElement("span")
+    const time = document.createElement("span");
 
     div.classList.add("message--other")
 
     span.classList.add("message--sender")
     span.style.color = senderColor
 
-    div.appendChild(span)
+    time.classList.add("message--time");
+    time.textContent = getCurrentTime();
 
     span.innerHTML = sender
+    div.appendChild(span)
+
     div.innerHTML += content
+    div.appendChild(time);
 
     return div
 }
 
+const getCurrentTime = () => {
+    const now = new Date();
+    return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
 
 const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length)

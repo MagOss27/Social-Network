@@ -136,17 +136,25 @@ body {
 }
 
 .message--self {
-    background-color: #f2f2f2;
-    color: #121212;
+    background-color: #164837;
+    color: white;
     border-radius: 10px 10px 0 10px;
     align-self: flex-end;
 }
 
 .message--other {
-    background-color: #333;
-    color: #f2f2f2;
+    background-color: #1f282a;
+    color: white;
     border-radius: 0 10px 10px 10px;
     align-self: flex-start;
+}
+
+.message--time {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #6b827f;
+    margin-top: 5px;
 }
 
 .message--sender {
