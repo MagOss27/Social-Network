@@ -163,3 +163,13 @@ body {
     font-weight: 700;
     color: cadetblue;
 }
+
+.message--system {
+    text-align: center;
+    background-color: #e0f7fa;
+    color: #00796b;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 0.85rem;
+    margin: 10px 0;
+}

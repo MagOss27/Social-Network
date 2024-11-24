@@ -89,6 +89,13 @@ const processMessage = ({ data }) => {
     scrollScreen()
 }
 
+const createSystemMessageElement = (content) => {
+    const div = document.createElement("div");
+    div.classList.add("message--system");
+    div.innerHTML = content;
+    return div;
+};
+
 const handleLogin = (event) => {
     event.preventDefault();
 
@@ -98,6 +105,10 @@ const handleLogin = (event) => {
 
     login.style.display = "none";
     chat.style.display = "flex";
+
+    // Exibe mensagem de entrada do usuário na rede social
+    const systemMessage = createSystemMessageElement(`${user.name} entrou na Rede Social`);
+    chatMessages.appendChild(systemMessage);
 
     websocket = new WebSocket("wss://social-network-backend-hzi8.onrender.com");
     websocket.onmessage = processMessage
