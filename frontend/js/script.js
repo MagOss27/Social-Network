@@ -92,16 +92,46 @@ const processMessage = ({ data }) => {
     if (type === "system") {
         // Mensagem do sistema
         message = createSystemMessageElement(content);
+    } else if (type === "image") {
+        // Mensagem de imagem
+        message = createImageMessageElement(content, userName, userColor);
     } else {
-        // Mensagem normal
+        // Mensagem de texto
         message = userId === user.id
             ? createMessageSelfElement(content)
             : createMessageOtherElement(content, userName, userColor);
     }
 
     chatMessages.appendChild(message);
-
     scrollScreen();
+};
+
+// Função para criar uma mensagem de imagem
+const createImageMessageElement = (imageSrc, sender, senderColor) => {
+    const div = document.createElement("div");
+    const span = document.createElement("span");
+    const time = document.createElement("span");
+
+    div.classList.add("message--other");
+
+    span.classList.add("message--sender");
+    span.style.color = senderColor;
+
+    time.classList.add("message--time");
+    time.textContent = getCurrentTime();
+
+    span.innerHTML = sender;
+    div.appendChild(span);
+
+    const img = document.createElement("img");
+    img.src = imageSrc;
+    img.alt = "Imagem enviada";
+    img.classList.add("message--image");
+
+    div.appendChild(img);
+    div.appendChild(time);
+
+    return div;
 };
 
 const handleLogin = (event) => {
@@ -131,17 +161,39 @@ const handleLogin = (event) => {
 const sendMessage = (event) => {
     event.preventDefault();
 
-    const message = {
-        type: "chat",
-        userId: user.id,
-        userName: user.name,
-        userColor: user.color,
-        content: chatInput.value
-    };
+    const messageContent = chatInput.value;
+    const imageFile = chatForm.querySelector(".chat__file").files[0];
 
-    websocket.send(JSON.stringify(message));
+    let message = {};
+
+    if (imageFile) {
+        // Se for uma imagem, converte para base64
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            message = {
+                type: "image",
+                userId: user.id,
+                userName: user.name,
+                userColor: user.color,
+                content: reader.result // O conteúdo será a imagem em base64
+            };
+            websocket.send(JSON.stringify(message));
+        };
+        reader.readAsDataURL(imageFile); // Lê a imagem como base64
+    } else if (messageContent.trim() !== "") {
+        // Caso contrário, envia apenas a mensagem de texto
+        message = {
+            type: "chat",
+            userId: user.id,
+            userName: user.name,
+            userColor: user.color,
+            content: messageContent
+        };
+        websocket.send(JSON.stringify(message));
+    }
 
     chatInput.value = "";
+    chatForm.querySelector(".chat__file").value = ""; // Limpa o campo de arquivo
 };
 
 loginForm.addEventListener("submit", handleLogin);

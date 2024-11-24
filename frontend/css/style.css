@@ -197,3 +197,15 @@ body {
 .online-users {
     font-size: 1rem;
 }
+
+.message--image {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+/* Estilo para o ícone de câmera com hover */
+.chat__camera {
+    cursor: pointer; /* Garante que o ícone tenha um cursor de "mão" ao passar sobre ele */
+}
