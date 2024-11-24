@@ -146,3 +146,25 @@ const sendMessage = (event) => {
 
 loginForm.addEventListener("submit", handleLogin);
 chatForm.addEventListener("submit", sendMessage);
+
+// Elemento de contador de usuários online
+const onlineUsersContainer = document.querySelector(".online-users-container");
+const onlineUsersText = onlineUsersContainer.querySelector(".online-users");
+
+// Função para atualizar o número de usuários online
+const updateOnlineUsers = (onlineCount) => {
+    onlineUsersText.textContent = `${onlineCount} online`;
+};
+
+// Modificação no WebSocket para processar o número de usuários online
+websocket.onmessage = (event) => {
+    const { data } = event;
+    const parsedData = JSON.parse(data);
+
+    // Verifique se o tipo de mensagem contém a contagem de usuários
+    if (parsedData.onlineCount !== undefined) {
+        updateOnlineUsers(parsedData.onlineCount);
+    }
+
+    processMessage(parsedData);
+};
